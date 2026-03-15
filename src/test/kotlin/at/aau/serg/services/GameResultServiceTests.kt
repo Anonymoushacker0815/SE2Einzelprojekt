@@ -72,4 +72,33 @@ class GameResultServiceTests {
         assertEquals(2, res[1].id)
     }
 
+    @Test
+    fun test_deleteGameResult_existingId_removesElement() {
+        val gameResult1 = GameResult(0, "player1", 1, 1.0)
+        val gameResult2 = GameResult(0, "player2", 2, 1.0)
+
+        service.addGameResult(gameResult1)
+        service.addGameResult(gameResult2)
+
+        service.deleteGameResult(1)
+        val res = service.getGameResults()
+
+        assertEquals(1, res.size)
+        assertEquals(gameResult2, res[0])
+        assertNull(service.getGameResult(1))
+    }
+
+    @Test
+    fun test_deleteGameResult_nonexistentId_keepsListUnchanged() {
+        val gameResult1 = GameResult(0, "player1", 1, 1.0)
+
+        service.addGameResult(gameResult1)
+        service.deleteGameResult(2)
+
+        val res = service.getGameResults()
+
+        assertEquals(1, res.size)
+        assertEquals(gameResult1, res[0])
+    }
+
 }
